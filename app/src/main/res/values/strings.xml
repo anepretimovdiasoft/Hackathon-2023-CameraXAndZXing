@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Hackathon-2023-CameraXAndZXing</string>
+    <string name="take_photo">Take Photo</string>
 </resources>
