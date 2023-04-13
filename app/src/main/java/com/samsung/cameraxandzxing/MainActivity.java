@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.camera.core.Camera;
 import androidx.camera.core.CameraSelector;
+import androidx.camera.core.ImageAnalysis;
 import androidx.camera.core.ImageCapture;
 import androidx.camera.core.ImageCaptureException;
 import androidx.camera.core.Preview;
@@ -50,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
             );
         }
 
-        activityMainBinding.btnSave.setOnClickListener( view -> takePhoto() );
+        activityMainBinding.btnSave.setOnClickListener(view -> takePhoto());
 
     }
 
@@ -96,11 +97,17 @@ public class MainActivity extends AppCompatActivity {
 
                         imageCapture = new ImageCapture.Builder().build();
 
+                        ImageAnalysis imageAnalysis = new ImageAnalysis.Builder()
+                                .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                                .build();
+                        imageAnalysis.setAnalyzer(ContextCompat.getMainExecutor(this), new QRAnalyzer());
+
                         Camera camera = cameraProvider.bindToLifecycle(
                                 this,
                                 cameraSelector,
                                 preview,
-                                imageCapture
+                                imageCapture,
+                                imageAnalysis
                         );
 
                     } catch (ExecutionException | InterruptedException e) {
@@ -117,7 +124,6 @@ public class MainActivity extends AppCompatActivity {
                 Manifest.permission.CAMERA
         ) == PackageManager.PERMISSION_GRANTED;
     }
-
 
 
     @Override
