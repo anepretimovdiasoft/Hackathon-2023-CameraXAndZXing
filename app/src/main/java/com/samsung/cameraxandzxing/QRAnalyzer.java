@@ -42,7 +42,7 @@ public class QRAnalyzer implements ImageAnalysis.Analyzer {
 
         int[] intData = new int[data.length];
         for (int i = 0; i < intData.length; i++) {
-            intData[i] = data[i] | 0xFF;
+            intData[i] = data[i] & 0xFF;
         }
 
         int height = image.getHeight();
